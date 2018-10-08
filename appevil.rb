@@ -41,9 +41,9 @@ def giphy_for query
    puts "Body is " + body.to_s  # more a sanity check thing
 
    if body == "hi" || body == "what" || body == "help" 
-     message = "Hi! My name is Sally. I can tell you food calories when you type in a specific food name." 
+     message = "Hi! My name is Mr.Evil." 
    elsif body == "how"
-     message = "Simply type the food you want to check, but make sure you have the food number. For example, 1 apple instead of apple."
+     message = "You can 'set alarm' or 'cancel alarm'."
    elsif body == "fact"
      message = array_of_lines = IO.readlines("facts.txt").sample
    elsif body == "haha" || body == "lol"
