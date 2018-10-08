@@ -41,13 +41,13 @@ def giphy_for query
    puts "Body is " + body.to_s  # more a sanity check thing
 
    if body == "hi" || body == "what" || body == "help" 
-     message = "Hi! My name is Mr.Evil." 
-   elsif body == "how"
-     message = "You can 'set alarm' or 'cancel alarm'."
+     message = "Hi! My name is Mr.Evil.Type 'how' to learn how to make me your alarm." 
    elsif body == "fact"
      message = array_of_lines = IO.readlines("facts.txt").sample
    elsif body == "haha" || body == "lol"
      message = "funny right?"
+   elsif body == "how"
+     message = "You can 'set alarm' or 'cancel alarm'."
    else
       message == "..."
     end 
