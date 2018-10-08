@@ -55,18 +55,12 @@ end
 
 # ---------------------- Interactive SMS ----------------------------
 get "/incoming/sms" do
-    session["counter"] ||= 1
     body = params[:Body] || ""
     sender = params[:From] || ""
     media = nil
 
-    if session["counter"] == 1
-      message = "What's up my friend. "
-      media = giphy_for "hello"
-    else
       message, media = determine_response body
       #media = nil
-    end
     
     # Build a twilio response object 
     twiml = Twilio::TwiML::MessagingResponse.new do |r|
@@ -79,11 +73,7 @@ get "/incoming/sms" do
         unless media.nil?
           m.media( media )
         end
-      end 
     end
-	
-    # increment the session counter
-    session["counter"] += 1
 	
     # send a response to twilio 
     content_type "text/xml"
@@ -101,26 +91,25 @@ def determine_response body
  
   puts "Body is " + body.to_s  # more a sanity check thing
 
-  if body == "hi" || body == "what" || body == "help" 
-    message = "Hi! My name is Mr.Evil.Type 'how' to learn how to make me your alarm." 
+  if body == "hi"
+    message == "what's up my friend"
+    media = giphy_for "hello"
+  elsif body == "who" || body == "what" 
+    message == "I am Mr. Evil, an alarm you will love (and hate), lol."
+  elsif body == "help" || body == "how"
+    message = "Simply type 'set alarm' or 'cancel alarm' to manage alarm settings." 
   elsif body == "fact"
     message = array_of_lines = IO.readlines("facts.txt").sample
-  elsif body == "haha" || body == "lol"
-    message = "funny right?"
-  elsif body == "how"
-    message = "You can 'set alarm' or 'cancel alarm'."
-    
-  elsif body = "call"
+  elsif body == "call"
     call = @client.calls.create(
         from: ENV["TWILIO_FROM"],
         to: ENV["MY_NUMBER"],
         url: "https://drive.google.com/file/d/1k9-l9gfbnGE-MjKY6qpA7eM_xnE69zFS/view?usp=sharing")
     puts call.to
-    
   else
-     message == "..."
+     message == "Hmmm...Not sure what you just said. Try type in something else. "
    end 
    
    return message, media
-
+ end
 end
