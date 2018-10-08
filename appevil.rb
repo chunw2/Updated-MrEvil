@@ -30,32 +30,6 @@ def giphy_for query
    
  end
  
- 
- # --------------------- Conversations ------------------------
-
- def determine_response body
-   body = body.downcase.strip 
-   media = nil
-   message = ""
-  
-   puts "Body is " + body.to_s  # more a sanity check thing
-
-   if body == "hi" || body == "what" || body == "help" 
-     message = "Hi! My name is Mr.Evil.Type 'how' to learn how to make me your alarm." 
-   elsif body == "fact"
-     message = array_of_lines = IO.readlines("facts.txt").sample
-   elsif body == "haha" || body == "lol"
-     message = "funny right?"
-   elsif body == "how"
-     message = "You can 'set alarm' or 'cancel alarm'."
-   else
-      message == "..."
-    end 
-    
-    return message, media
-
- end
-
 
 # -------------------------- Sign Up ------------------------------
 get "/" do
@@ -118,3 +92,35 @@ get "/incoming/sms" do
 end
 
 
+# --------------------- Conversation Details ------------------------
+
+def determine_response body
+  body = body.downcase.strip 
+  media = nil
+  message = ""
+ 
+  puts "Body is " + body.to_s  # more a sanity check thing
+
+  if body == "hi" || body == "what" || body == "help" 
+    message = "Hi! My name is Mr.Evil.Type 'how' to learn how to make me your alarm." 
+  elsif body == "fact"
+    message = array_of_lines = IO.readlines("facts.txt").sample
+  elsif body == "haha" || body == "lol"
+    message = "funny right?"
+  elsif body == "how"
+    message = "You can 'set alarm' or 'cancel alarm'."
+    
+  elsif body = "call"
+    call = @client.calls.create(
+        to: ENV["TWILIO_FROM"],
+        from: ENV["MY_NUMBER"],
+        url: "http://demo.twilio.com/docs/voice.xml")
+    puts call.to
+    
+  else
+     message == "..."
+   end 
+   
+   return message, media
+
+end
