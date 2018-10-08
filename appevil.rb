@@ -112,8 +112,8 @@ def determine_response body
     
   elsif body = "call"
     call = @client.calls.create(
-        to: ENV["TWILIO_FROM"],
-        from: ENV["MY_NUMBER"],
+        from: ENV["TWILIO_FROM"],
+        to: ENV["MY_NUMBER"],
         url: "http://demo.twilio.com/docs/voice.xml")
     puts call.to
     
