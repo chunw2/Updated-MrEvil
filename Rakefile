@@ -57,7 +57,7 @@ end
 desc 'make an alarm call to your number'
 task :make_alarmcall do 
   
-  if session[:intent] == "set_alarm_time" && body.to_i > 0 
+  if time.now = alarm_time
   
   client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
   
@@ -67,10 +67,6 @@ task :make_alarmcall do
       url: "https://drive.google.com/file/d/1k9-l9gfbnGE-MjKY6qpA7eM_xnE69zFS/view?usp=sharing"
    )
   puts call.to
-  
-  until count = 5 || body == "Mr.Evil is the best!"
-    
-  end
   
   else
   end

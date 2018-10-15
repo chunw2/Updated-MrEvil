@@ -47,7 +47,7 @@ def determine_response body, sender
  #time = params[:time]
  #month = params[:month]
  #day = params[:day]
- session[:intent] = nil
+ session[:intent] = "" || nil
  message = ""
 
  puts "Body is " + body.to_s  # more a sanity check thing
@@ -168,6 +168,6 @@ get "/incoming/sms" do
 end
 
 
-get "/tasks" do
-  Task.all.to_json
+get "/users" do
+  User.all.to_json
 end
