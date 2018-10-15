@@ -64,7 +64,7 @@ def determine_response body, sender
    session[:intent] = "set_alarm_time"
  elsif session[:intent] == "set_alarm_time" 
    
-   alarm_time = Chronic.parse( body )
+   alarm_time = Chronic.parse( "body" )
    
    if alarm_time.nil? 
      message = "I didn't get that. Try typing your alarm like 'tomorrow at 9am' or '5pm'"
