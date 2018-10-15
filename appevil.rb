@@ -53,10 +53,10 @@ def determine_response body, sender
  puts "Body is " + body.to_s  # more a sanity check thing
 
  if body == "hi"
-   message == "what's up my friend"
+   message = "what's up my friend"
    media = giphy_for "hello"
  elsif body == "who" || body == "what" 
-   message == "I am Mr. Evil, an alarm bot you will love (and hate), lol."
+   message = "I am Mr. Evil, an alarm bot you will love (and hate), lol."
  elsif body == "help" || body == "how"
    message = "To manage alarm settings,  simply type 'set/cancel alarm'."
  elsif body == "set alarm" 
