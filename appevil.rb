@@ -2,6 +2,14 @@ require "sinatra"
 require "sinatra/reloader" if development?
 require "twilio-ruby"
 require "giphy"
+require "rake"
+
+require "sinatra/activerecord"
+
+require "json"
+require 'chronic'
+
+require_relative './models/user'
 
 enable :sessions 
 
@@ -18,17 +26,94 @@ def giphy_for query
     config.api_key = ENV["GIPHY_API_KEY"]
   end
   
-   results = Giphy.search(query,{limit:5})
+  results = Giphy.search(query,{limit:5})
    
-   unless results.empty?
-     gif = results.sample.original_image.url
-     return gif.to_s
+  unless results.empty?
+    gif = results.sample.original_image.url
+    return gif.to_s
      
-   else
-     return nil
-   end
+  else
+    return nil
+  end
+
+end
+ 
+
+# --------------------- Conversation Details ------------------------
+
+def determine_response body, sender
+ body = body.downcase.strip 
+ media = nil
+ #time = params[:time]
+ #month = params[:month]
+ #day = params[:day]
+ session[:intent] = nil
+ message = ""
+
+ puts "Body is " + body.to_s  # more a sanity check thing
+
+ if body == "hi"
+   message == "what's up my friend"
+   media = giphy_for "hello"
+ elsif body == "who" || body == "what" 
+   message == "I am Mr. Evil, an alarm bot you will love (and hate), lol."
+ elsif body == "help" || body == "how"
+   message = "To manage alarm settings,  simply type 'set/cancel alarm'."
+ elsif body == "set alarm" 
+   message = "What time would you like to set it for? Say something like 'tomorrow at 8:00'."
+   session[:intent] = "set_alarm_time"
+ elsif session[:intent] == "set_alarm_time" 
    
- end
+   alarm_time = Chronic.parse( body )
+   
+   if alarm_time.nil? 
+     message = "I didn't get that. Try typing your alarm like 'tomorrow at 9am' or '5pm'"
+     
+   else 
+     message = "I've set it for #{body}. "
+     #require_relative './models/task'
+     #session[:intent] = "set_alarm_date"
+  #elsif session[:intent] == "set_alarm_date" && body.to_i > 0
+     # you'd actually want to set this.
+     #message = "I've set it for #{body}"
+     #session[:intent] = "set_alarm_date"
+    
+     puts "Number is #{sender}"
+    
+     user = User.where( number:sender ).first_or_create
+     user.number = sender
+     user.alarm = Chronic.parse( body )
+     user.save!
+     
+     puts user.to_json
+     
+     message = "I've set it for #{body}"
+    
+       
+   end 
+    
+
+ elsif body == "cancel alarm"
+    message = "What's the time you would like to cancel (24hr-format)?"
+    session[:intent] = "cancel_alarm_time"
+ elsif session[:intent] == "cancel_alarm_time" && body.to_i > 0 
+     message = "I've cancelled the one at #{body}."
+     #require_relative './models/task'
+     #session[:intent] = "cancel_alarm_date"
+  #elsif session[:intent] == "cancel_alarm_date" 
+     # you'd actually want to set this.
+     #message = "I've set it for #{body}"
+     #session[:intent] = "set_alarm_date"
+       
+ elsif body == "fact"
+   message = array_of_lines = IO.readlines("facts.txt").sample
+ else
+    message = "Hmmm...Not sure what you just said. Try type in something else. "
+ end 
+ return message, media
+end
+
+
  
 
 # -------------------------- Sign Up ------------------------------
@@ -41,7 +126,7 @@ post "/signup" do
   client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
   
   # "welcoming" message send to users
-  message = "Hi " + params[:first_name] + ", Ready for Mr.Evil? I can be annoying in the morning. Respond 'Facts' to know a little bit more about me."
+  message = "Hi " + params[:first_name] + ", Ready for Mr.Evil? I will be your BFF for have-to-get-up mornings."
   
   client.api.account.messages.create(
     from: ENV["TWILIO_FROM"],
@@ -49,7 +134,7 @@ post "/signup" do
     body: message
   )
   # message show on the signup webpage
-	"Successfully sign up! You'll receive a text message in a few minutes from Mr.Evil. "
+	"Successfully signed up! You'll receive a text message in a few minutes from Mr.Evil. "
 end
 
 
@@ -59,8 +144,8 @@ get "/incoming/sms" do
     sender = params[:From] || ""
     media = nil
 
-      message, media = determine_response body
-      #media = nil
+    message, media = determine_response body, sender
+    #media = nil
     
     # Build a twilio response object 
     twiml = Twilio::TwiML::MessagingResponse.new do |r|
@@ -73,6 +158,7 @@ get "/incoming/sms" do
         unless media.nil?
           m.media( media )
         end
+      end
     end
 	
     # send a response to twilio 
@@ -82,34 +168,6 @@ get "/incoming/sms" do
 end
 
 
-# --------------------- Conversation Details ------------------------
-
-def determine_response body
-  body = body.downcase.strip 
-  media = nil
-  message = ""
- 
-  puts "Body is " + body.to_s  # more a sanity check thing
-
-  if body == "hi"
-    message == "what's up my friend"
-    media = giphy_for "hello"
-  elsif body == "who" || body == "what" 
-    message == "I am Mr. Evil, an alarm you will love (and hate), lol."
-  elsif body == "help" || body == "how"
-    message = "Simply type 'set alarm' or 'cancel alarm' to manage alarm settings." 
-  elsif body == "fact"
-    message = array_of_lines = IO.readlines("facts.txt").sample
-  elsif body == "call"
-    call = @client.calls.create(
-        from: ENV["TWILIO_FROM"],
-        to: ENV["MY_NUMBER"],
-        url: "https://drive.google.com/file/d/1k9-l9gfbnGE-MjKY6qpA7eM_xnE69zFS/view?usp=sharing")
-    puts call.to
-  else
-     message == "Hmmm...Not sure what you just said. Try type in something else. "
-   end 
-   
-   return message, media
- end
+get "/tasks" do
+  Task.all.to_json
 end

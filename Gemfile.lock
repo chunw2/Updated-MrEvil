@@ -14,6 +14,12 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.3)
+    activemodel (5.2.1)
+      activesupport (= 5.2.1)
+    activerecord (5.2.1)
+      activemodel (= 5.2.1)
+      activesupport (= 5.2.1)
+      arel (>= 9.0)
     activesupport (5.2.1)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 0.7, < 2)
@@ -21,8 +27,10 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
+    arel (9.0.0)
     backports (3.11.4)
     builder (3.2.3)
+    chronic (0.10.2)
     concurrent-ruby (1.0.5)
     crass (1.0.4)
     dotenv (2.5.0)
@@ -45,6 +53,7 @@ GEM
       launchy (~> 2.4)
     i18n (1.1.0)
       concurrent-ruby (~> 1.0)
+    json (2.1.0)
     jwt (2.1.0)
     launchy (2.4.3)
       addressable (~> 2.3)
@@ -60,6 +69,7 @@ GEM
     nokogiri (1.8.5)
       mini_portile2 (~> 2.3.0)
     oj (3.6.11)
+    pg (1.1.3)
     public_suffix (3.0.3)
     rack (2.0.5)
     rack-protection (2.0.4)
@@ -78,11 +88,16 @@ GEM
       rake (>= 0.8.7)
       thor (>= 0.19.0, < 2.0)
     rake (12.3.1)
+    shotgun (0.9.2)
+      rack (>= 1.0)
     sinatra (2.0.4)
       mustermann (~> 1.0)
       rack (~> 2.0)
       rack-protection (= 2.0.4)
       tilt (~> 2.0)
+    sinatra-activerecord (2.0.13)
+      activerecord (>= 3.2)
+      sinatra (>= 1.0)
     sinatra-contrib (2.0.4)
       activesupport (>= 4.0.0)
       backports (>= 2.8.2)
@@ -105,9 +120,17 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activerecord
+  activesupport
+  chronic
   dotenv-rails
   giphy
+  json
+  pg
+  rake
+  shotgun
   sinatra
+  sinatra-activerecord
   sinatra-contrib
   twilio-ruby (> 5.0.0)
 
