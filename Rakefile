@@ -3,6 +3,7 @@ require 'twilio-ruby'
 require 'giphy'
 
 require "./appevil"
+require "rake"
 require "sinatra/activerecord/rake"
 
 # Load environment variables using Dotenv. If a .env file exists, it will
@@ -12,6 +13,7 @@ configure :development do
   Dotenv.load
 end
 
+
 # def determine_response alarm
 #   alarm = params[:time]
 
@@ -20,7 +22,9 @@ def determine_response body
  media = nil
  session[:intent] ||= nil
  message = ""
+end
 
+alarm_time = Chronic.parse( "body" )
 
 desc 'outputs hello world to the terminal'
 task :hello_world do 
@@ -57,7 +61,7 @@ end
 desc 'make an alarm call to your number'
 task :make_alarmcall do 
   
-  if time.now = alarm_time
+  if Time.now = alarm_time
   
   client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
   
@@ -74,4 +78,3 @@ task :make_alarmcall do
 end
   
  
-end	

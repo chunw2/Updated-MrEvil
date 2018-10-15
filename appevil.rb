@@ -47,7 +47,7 @@ def determine_response body, sender
  #time = params[:time]
  #month = params[:month]
  #day = params[:day]
- session[:intent] = "" || nil
+ session[:intent] ||= nil
  message = ""
 
  puts "Body is " + body.to_s  # more a sanity check thing
@@ -64,7 +64,7 @@ def determine_response body, sender
    session[:intent] = "set_alarm_time"
  elsif session[:intent] == "set_alarm_time" 
    
-   alarm_time = Chronic.parse( "body" )
+   alarm_time = Chronic.parse( body )
    
    if alarm_time.nil? 
      message = "I didn't get that. Try typing your alarm like 'tomorrow at 9am' or '5pm'"
