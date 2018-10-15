@@ -62,13 +62,13 @@ def determine_response body, sender
  elsif body == "set alarm" 
    message = "What time would you like to set it for? Say something like 'tomorrow at 8:00'."
    session[:intent] = "set_alarm_time"
+   
  elsif session[:intent] == "set_alarm_time" 
    
    alarm_time = Chronic.parse( body )
    
    if alarm_time.nil? 
      message = "I didn't get that. Try typing your alarm like 'tomorrow at 9am' or '5pm'"
-     
    else 
      message = "I've set it for #{body}. "
      #require_relative './models/task'
@@ -79,18 +79,14 @@ def determine_response body, sender
      #session[:intent] = "set_alarm_date"
     
      puts "Number is #{sender}"
-    
      user = User.where( number:sender ).first_or_create
      user.number = sender
      user.alarm = Chronic.parse( body )
      user.save!
      
      puts user.to_json
-     
-     message = "I've set it for #{body}"
-    
-       
-   end 
+     #message = "I've set it for #{body}"
+ end 
     
 
  elsif body == "cancel alarm"
