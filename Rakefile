@@ -36,7 +36,7 @@ end
 desc 'sends a test twilio SMS to your number'
 task :send_sms do 
   
-  if session[:intent] == "set_alarm_time" && body.to_i > 0 
+  #if session[:intent] == "set_alarm_time" && body.to_i > 0 
   
   client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
 
@@ -51,8 +51,8 @@ task :send_sms do
 	
   puts "Send an SMS"  
   
-  else
-  end
+  #else
+  #end
   
 end
 

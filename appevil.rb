@@ -13,10 +13,14 @@ require_relative './models/user'
 
 enable :sessions 
 
+thanks = ["No worries.", "You are welcome.", "No prob.", "My pleasure.", "Glad to help."]
+
 configure :development do
   require 'dotenv'
   Dotenv.load
 end
+
+Time.now
 
 
 # -------------   Adding Giphy -----------------
@@ -52,11 +56,9 @@ def determine_response body, sender
 
  puts "Body is " + body.to_s  # more a sanity check thing
 
- if body == "hi"
-   message = "what's up my friend"
+ if body == "hi" || body == "who" || body == "what"
+   message = "What's up my friend~ I am Mr.Evil, an alarm bot. Type 'how' or 'help' to learn the ways to set alarms."
    media = giphy_for "hello"
- elsif body == "who" || body == "what" 
-   message = "I am Mr. Evil, an alarm bot you will love (and hate), lol."
  elsif body == "help" || body == "how"
    message = "To manage alarm settings,  simply type 'set/cancel alarm'."
  elsif body == "set alarm" 
@@ -70,7 +72,7 @@ def determine_response body, sender
    if alarm_time.nil? 
      message = "I didn't get that. Try typing your alarm like 'tomorrow at 9am' or '5pm'"
    else 
-     message = "I've set it for #{body}. "
+     message = "I've set it for #{body}. Learn some facts about me? Type 'fact'."
      #require_relative './models/task'
      #session[:intent] = "set_alarm_date"
   #elsif session[:intent] == "set_alarm_date" && body.to_i > 0
@@ -103,6 +105,8 @@ def determine_response body, sender
        
  elsif body == "fact"
    message = array_of_lines = IO.readlines("facts.txt").sample
+ elsif body.include "thanks"
+   message = thanks.sample
  else
     message = "Hmmm...Not sure what you just said. Try type in something else. "
  end 
