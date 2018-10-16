@@ -61,7 +61,8 @@ end
 desc 'make an alarm call to your number'
 task :make_alarmcall do 
   
-  if Time.now = alarm_time
+  if Time.now = 
+    #evildata = SELECT alarm FROM users WHERE id = 1
   
   client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
   

@@ -56,7 +56,7 @@ def determine_response body, sender
  puts "Body is " + body.to_s  # more a sanity check thing
 
  if body == "hi" || body == "who" || body == "what"
-   message = "What's up my friend~ I am Mr.Evil, an alarm bot. Type 'how' or 'help' to learn the ways to set alarms."
+   message = "What's up my friend~ I am Mr.Evil, an calling alarm bot. Type 'how' or 'help' to learn the ways to set alarms."
    media = giphy_for "hello"
  elsif body == "help" || body == "how"
    message = "To manage alarm settings,  simply type 'set/cancel alarm'. Interested in learning more about me? Type 'fact'."
@@ -75,7 +75,7 @@ def determine_response body, sender
    if alarm_time.nil? 
      message = "I didn't get that. Try typing your alarm like 'tomorrow at 9am' or '5pm'"
    else 
-     message = "I've set it for #{body}."
+     message = "I've set it for #{body}. Don't forget to unmute your phone for the coming alarm call from me."
      #require_relative './models/task'
      #session[:intent] = "set_alarm_date"
   #elsif session[:intent] == "set_alarm_date" && body.to_i > 0
