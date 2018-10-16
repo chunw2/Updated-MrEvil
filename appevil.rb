@@ -60,7 +60,7 @@ def determine_response body, sender
    media = giphy_for "hello"
  elsif body == "help" || body == "how"
    message = "To manage alarm settings,  simply type 'set/cancel alarm'. Interested in learning more about me? Type 'fact'."
- elsif body == "fact"
+ elsif body.include? "fact"
    message = array_of_lines = IO.readlines("facts.txt").sample
  elsif body.include? "thanks"
    message = thanks.sample
