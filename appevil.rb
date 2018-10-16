@@ -13,8 +13,6 @@ require_relative './models/user'
 
 enable :sessions 
 
-thanks = ["No worries.", "You are welcome.", "No prob.", "My pleasure.", "Glad to help."]
-
 configure :development do
   require 'dotenv'
   Dotenv.load
@@ -53,6 +51,7 @@ def determine_response body, sender
  #day = params[:day]
  session[:intent] ||= nil
  message = ""
+ thanks = ["No worries.", "You are welcome.", "No prob.", "My pleasure.", "Glad to help."]
 
  puts "Body is " + body.to_s  # more a sanity check thing
 
@@ -63,7 +62,7 @@ def determine_response body, sender
    message = "To manage alarm settings,  simply type 'set/cancel alarm'. Interested in learning more about me? Type 'fact'."
  elsif body == "fact"
    message = array_of_lines = IO.readlines("facts.txt").sample
- elsif body.include "thanks"
+ elsif body.include? "thanks"
    message = thanks.sample
  elsif body == "set alarm" 
    message = "What time would you like to set it for? Say something like 'tomorrow at 8:00'."
