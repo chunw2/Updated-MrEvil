@@ -60,7 +60,11 @@ def determine_response body, sender
    message = "What's up my friend~ I am Mr.Evil, an alarm bot. Type 'how' or 'help' to learn the ways to set alarms."
    media = giphy_for "hello"
  elsif body == "help" || body == "how"
-   message = "To manage alarm settings,  simply type 'set/cancel alarm'."
+   message = "To manage alarm settings,  simply type 'set/cancel alarm'. Interested in learning more about me? Type 'fact'."
+ elsif body == "fact"
+   message = array_of_lines = IO.readlines("facts.txt").sample
+ elsif body.include "thanks"
+   message = thanks.sample
  elsif body == "set alarm" 
    message = "What time would you like to set it for? Say something like 'tomorrow at 8:00'."
    session[:intent] = "set_alarm_time"
@@ -72,7 +76,7 @@ def determine_response body, sender
    if alarm_time.nil? 
      message = "I didn't get that. Try typing your alarm like 'tomorrow at 9am' or '5pm'"
    else 
-     message = "I've set it for #{body}. Learn some facts about me? Type 'fact'."
+     message = "I've set it for #{body}."
      #require_relative './models/task'
      #session[:intent] = "set_alarm_date"
   #elsif session[:intent] == "set_alarm_date" && body.to_i > 0
@@ -102,11 +106,6 @@ def determine_response body, sender
      # you'd actually want to set this.
      #message = "I've set it for #{body}"
      #session[:intent] = "set_alarm_date"
-       
- elsif body == "fact"
-   message = array_of_lines = IO.readlines("facts.txt").sample
- elsif body.include "thanks"
-   message = thanks.sample
  else
     message = "Hmmm...Not sure what you just said. Try type in something else. "
  end 
