@@ -30,7 +30,7 @@ def giphy_for query
     config.api_key = ENV["GIPHY_API_KEY"]
   end
   
-  results = Giphy.search(query,{limit:5})
+  results = Giphy.search(query,{limit:15})
    
   unless results.empty?
     gif = results.sample.original_image.url
@@ -58,12 +58,13 @@ def determine_response body, sender
  puts "Body is " + body.to_s  # more a sanity check thing
 
  if body == "hi" || body == "who" || body == "what" 
-   message = "What's up my friend~ I am Mr.Evil, an calling alarm bot. Type 'how' or 'help' to learn the ways to set alarms."
+   message = "Hey, need my help? I am Sally, a fake calling bot who can help you get out of awkward situations. 
+   Type 'how' to learn the ways to set calls."
    media = giphy_for "hello"
- elsif body == "help" || body == "how"
-   message = "To manage alarm settings,  simply type 'set alarm' or 'cancel alarm'. Interested in learning more about me? Type 'fact'."
+ elsif body == "how"
+   message = "To manage call settings,  simply type 'set call' or 'cancel call'. Or need some fake bio from me? Type 'fact'."
 
-elsif body == "call"
+ elsif body == "call"
 
   client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
 
@@ -76,10 +77,13 @@ elsif body == "call"
  
  elsif body.include? "fact"
    message = array_of_lines = IO.readlines("facts.txt").sample
+   
  elsif body.include? "thanks"
    message = thanks.sample
- elsif body == "set alarm" 
-   message = "What time would you like to set it for? Say something like 'tomorrow at 8:00'."
+   media = giphy_for "thank"
+   
+ elsif body == "set call" 
+   message = "What time would you like to set it for? Say something like 'tomorrow at 8:00' or 'in 1 minute'."
    session[:intent] = "set_alarm_time"
    
  elsif session[:intent] == "set_alarm_time" 
@@ -87,9 +91,9 @@ elsif body == "call"
    alarm_time = Chronic.parse( body )
    
    if alarm_time.nil? 
-     message = "I didn't get that. Try typing your alarm like 'tomorrow at 9am' or '5pm'"
+     message = "I didn't get that. Try typing your call time like 'tomorrow at 9am' or '5pm'"
    else 
-     message = "I've set it for #{body}. Type 'cancel alarm' if you made a mistake. Don't forget to unmute your phone for the incoming alarm call from me."
+     message = "I've set it for #{body}. Type 'cancel call' if you made a mistake. Don't forget to unmute your phone for the incoming call from me."
      #require_relative './models/task'
      #session[:intent] = "set_alarm_date"
   #elsif session[:intent] == "set_alarm_date" && body.to_i > 0
@@ -107,9 +111,8 @@ elsif body == "call"
      #message = "I've set it for #{body}"
  end 
  
- 
     
- elsif body == "cancel alarm"
+ elsif body == "cancel call"
     message = "What's the time you would like to cancel (24hr-format)?"
     session[:intent] = "cancel_alarm_time"
  elsif session[:intent] == "cancel_alarm_time" && body.to_i > 0 
@@ -139,7 +142,7 @@ post "/signup" do
   client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
   
   # "welcoming" message send to users
-  message = "Hi " + params[:first_name] + ", Ready for Mr.Evil? I will be your BFF for have-to-get-up mornings."
+  message = "Hi " + params[:first_name] + ", I am Sally, a fake calling bot who can help you get out of awkward situations."
   
   client.api.account.messages.create(
     from: ENV["TWILIO_FROM"],
