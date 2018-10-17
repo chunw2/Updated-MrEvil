@@ -58,8 +58,7 @@ def determine_response body, sender
  puts "Body is " + body.to_s  # more a sanity check thing
 
  if body == "hi" || body == "who" || body == "what" 
-   message = "Hey, need my help? I am Sally, a fake calling bot who can help you get out of awkward situations. 
-   Type 'how' to learn the ways to set calls."
+   message = "Hey, need my help? I am Sally, a fake calling bot who can help you get out of awkward situations. Type 'how' to learn the ways to set calls."
    media = giphy_for "hello"
  elsif body == "how"
    message = "To manage call settings,  simply type 'set call' or 'cancel call'. Or need some fake bio from me? Type 'fact'."
@@ -83,7 +82,7 @@ def determine_response body, sender
    media = giphy_for "thank"
    
  elsif body == "set call" 
-   message = "What time would you like to set it for? Say something like 'tomorrow at 8:00' or 'in 1 minute'."
+   message = "What time would you like to set it for? Say something like 'today at 3 pm' or 'in 10 minute'."
    session[:intent] = "set_alarm_time"
    
  elsif session[:intent] == "set_alarm_time" 
@@ -113,7 +112,7 @@ def determine_response body, sender
  
     
  elsif body == "cancel call"
-    message = "What's the time you would like to cancel (24hr-format)?"
+    message = "What's the time you would like to cancel?"
     session[:intent] = "cancel_alarm_time"
  elsif session[:intent] == "cancel_alarm_time" && body.to_i > 0 
      message = "I've cancelled the one at #{body}."
