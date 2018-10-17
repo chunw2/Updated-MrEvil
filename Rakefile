@@ -84,14 +84,18 @@ task :make_alarmcall do
       
       if not user.number.empty? 
 
-        client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
+        begin
+          client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
 
-        call = client.calls.create(
-            from: ENV["TWILIO_FROM"],
-            to: user.number,
-            url: "https://drive.google.com/file/d/1k9-l9gfbnGE-MjKY6qpA7eM_xnE69zFS/view?usp=sharing"
-            )
-        puts call.to
+          call = client.calls.create(
+              from: ENV["TWILIO_FROM"],
+              to: user.number,
+              url: "https://drive.google.com/file/d/1k9-l9gfbnGE-MjKY6qpA7eM_xnE69zFS/view?usp=sharing"
+              )
+          puts call.to
+        rescue
+          puts "Invalid number or twilio error"
+        end
 
       end 
       
