@@ -80,7 +80,7 @@ task :make_alarmcall do
     puts " User alarm is #{user.alarm} "
     puts " User alarm is #{user.number} "
   
-    if Time.now > user.alarm 
+    if (not user.alarm.nil?) and Time.now > user.alarm 
       
       if not user.number.empty? 
 
