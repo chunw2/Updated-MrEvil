@@ -94,6 +94,16 @@ def determine_response body, sender
      puts user.to_json
      #message = "I've set it for #{body}"
  end 
+ 
+ elsif body.include? "call"
+ client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
+
+ call = client.calls.create(
+     from: ENV["TWILIO_FROM"],
+     to: user.number,
+     url: "https://drive.google.com/file/d/1k9-l9gfbnGE-MjKY6qpA7eM_xnE69zFS/view?usp=sharing"
+     )
+ puts call.to
     
  elsif body == "cancel alarm"
     message = "What's the time you would like to cancel (24hr-format)?"
