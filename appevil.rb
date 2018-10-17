@@ -79,10 +79,10 @@ def determine_response body, sender
    
  elsif body.include? "thanks"
    message = thanks.sample
-   media = giphy_for "thank"
+   media = giphy_for "no problem"
    
  elsif body == "set call" 
-   message = "What time would you like to set it for? Say something like 'today at 3 pm' or 'in 10 minute'."
+   message = "What time would you like to set it for? Say something like 'today at 3 pm' or 'in 10 minute'. Type 'call' for immediate calls."
    session[:intent] = "set_alarm_time"
    
  elsif session[:intent] == "set_alarm_time" 
