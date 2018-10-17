@@ -94,7 +94,8 @@ task :make_alarmcall do
 
       end 
       
-      user.alarm = user.alarm + 10.minutes
+      #user.alarm = user.alarm + 10.minutes
+      user.alarm = nil
       user.save!
 
     else
