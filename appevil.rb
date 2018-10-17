@@ -62,6 +62,17 @@ def determine_response body, sender
    media = giphy_for "hello"
  elsif body == "help" || body == "how"
    message = "To manage alarm settings,  simply type 'set alarm' or 'cancel alarm'. Interested in learning more about me? Type 'fact'."
+   
+ # elsif body.include? "call"
+#
+#  client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
+#  call = client.calls.create(
+#      from: ENV["TWILIO_FROM"],
+#      to: ENV["MY_NUMBER"]
+#      url: "http://demo.twilio.com/docs/voice.xml"
+#      )
+#  puts call.to
+ 
  elsif body.include? "fact"
    message = array_of_lines = IO.readlines("facts.txt").sample
  elsif body.include? "thanks"
@@ -95,16 +106,7 @@ def determine_response body, sender
      #message = "I've set it for #{body}"
  end 
  
- # elsif body.include? "call"
- #
- # client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
- #
- # call = client.calls.create(
- #     from: ENV["TWILIO_FROM"],
- #     to: "+13369349080"
- #     url: "http://demo.twilio.com/docs/voice.xml"
- #     )
- # puts call.to
+ 
     
  elsif body == "cancel alarm"
     message = "What's the time you would like to cancel (24hr-format)?"
