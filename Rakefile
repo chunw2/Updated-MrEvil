@@ -1,10 +1,10 @@
 require "sinatra"
+require "sinatra/activerecord/rake"
+require "rake"
 require 'twilio-ruby'
 require 'giphy'
 
 require "./appevil"
-require "rake"
-require "sinatra/activerecord/rake"
 
 # Load environment variables using Dotenv. If a .env file exists, it will
 # set environment variables from that file (useful for dev environments)
@@ -61,21 +61,53 @@ end
 desc 'make an alarm call to your number'
 task :make_alarmcall do 
   
-  if Time.now = 
-    #evildata = SELECT alarm FROM users WHERE id = 1
+  # body = params[:Body] || ""
+#   sender = params[:From] || ""
+#   media = nil
+#
+#   message, media = determine_response body, sender
+#
+#   def determine_response body, sender
+#   body = body.downcase.strip
   
-  client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
+  User.all.each do |user|
   
-  call = client.calls.create(
-      from: ENV["TWILIO_FROM"],
-      to: ENV["MY_NUMBER"],
-      url: "https://drive.google.com/file/d/1k9-l9gfbnGE-MjKY6qpA7eM_xnE69zFS/view?usp=sharing"
-   )
-  puts call.to
-  
-  else
+    #loop over all users
+    #...
+    
+    puts user.to_json
+    
+    
   end
   
-end
   
- 
+  user = User.where( id: 4 ).first
+  puts "Found User:"
+  puts user.to_json
+  
+  return if user.nil?
+  puts " User alarm is #{user.alarm} "
+  
+  if Time.now > user.alarm
+
+    client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
+
+    call = client.calls.create(
+        from: ENV["TWILIO_FROM"],
+        to: user.number,
+        url: "https://drive.google.com/file/d/1k9-l9gfbnGE-MjKY6qpA7eM_xnE69zFS/view?usp=sharing"
+        )
+    puts call.to
+
+    user.alarm = user.alarm + 10.minutes
+    user.save!
+
+  else
+    # handle error case
+  end
+
+  
+  #user.alarm = nil
+  #user.save
+  
+end

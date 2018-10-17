@@ -6,19 +6,21 @@ require "rake"
 
 require "sinatra/activerecord"
 
+
+
 require "json"
 require 'chronic'
 
-require_relative './models/user'
 
-enable :sessions 
 
 configure :development do
   require 'dotenv'
   Dotenv.load
 end
 
-Time.now
+require_relative './models/user'
+
+enable :sessions 
 
 
 # -------------   Adding Giphy -----------------
@@ -55,11 +57,11 @@ def determine_response body, sender
 
  puts "Body is " + body.to_s  # more a sanity check thing
 
- if body == "hi" || body == "who" || body == "what"
+ if body == "hi" || body == "who" || body == "what" 
    message = "What's up my friend~ I am Mr.Evil, an calling alarm bot. Type 'how' or 'help' to learn the ways to set alarms."
    media = giphy_for "hello"
  elsif body == "help" || body == "how"
-   message = "To manage alarm settings,  simply type 'set/cancel alarm'. Interested in learning more about me? Type 'fact'."
+   message = "To manage alarm settings,  simply type 'set alarm' or 'cancel alarm'. Interested in learning more about me? Type 'fact'."
  elsif body.include? "fact"
    message = array_of_lines = IO.readlines("facts.txt").sample
  elsif body.include? "thanks"
@@ -75,7 +77,7 @@ def determine_response body, sender
    if alarm_time.nil? 
      message = "I didn't get that. Try typing your alarm like 'tomorrow at 9am' or '5pm'"
    else 
-     message = "I've set it for #{body}. Don't forget to unmute your phone for the coming alarm call from me."
+     message = "I've set it for #{body}. Type 'cancel alarm' if you made a mistake. Don't forget to unmute your phone for the incoming alarm call from me."
      #require_relative './models/task'
      #session[:intent] = "set_alarm_date"
   #elsif session[:intent] == "set_alarm_date" && body.to_i > 0
@@ -93,7 +95,6 @@ def determine_response body, sender
      #message = "I've set it for #{body}"
  end 
     
-
  elsif body == "cancel alarm"
     message = "What's the time you would like to cancel (24hr-format)?"
     session[:intent] = "cancel_alarm_time"
