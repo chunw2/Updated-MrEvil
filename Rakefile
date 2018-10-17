@@ -75,36 +75,33 @@ task :make_alarmcall do
     #loop over all users
     #...
     
-    puts user.to_json
-    
+    puts "Found User:"
+  
+    puts " User alarm is #{user.alarm} "
+  
+    if Time.now > user.alarm
+
+      client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
+
+      call = client.calls.create(
+          from: ENV["TWILIO_FROM"],
+          to: user.number,
+          url: "https://drive.google.com/file/d/1k9-l9gfbnGE-MjKY6qpA7eM_xnE69zFS/view?usp=sharing"
+          )
+      puts call.to
+
+      user.alarm = user.alarm + 10.minutes
+      user.save!
+
+    else
+      # handle error case
+    end
     
   end
   
   
-  user = User.where( id: 4 ).first
-  puts "Found User:"
-  puts user.to_json
+  #user = User.where( id: 4 ).first
   
-  return if user.nil?
-  puts " User alarm is #{user.alarm} "
-  
-  if Time.now > user.alarm
-
-    client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
-
-    call = client.calls.create(
-        from: ENV["TWILIO_FROM"],
-        to: user.number,
-        url: "https://drive.google.com/file/d/1k9-l9gfbnGE-MjKY6qpA7eM_xnE69zFS/view?usp=sharing"
-        )
-    puts call.to
-
-    user.alarm = user.alarm + 10.minutes
-    user.save!
-
-  else
-    # handle error case
-  end
 
   
   #user.alarm = nil
