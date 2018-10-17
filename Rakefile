@@ -81,7 +81,7 @@ task :make_alarmcall do
   
     if Time.now > user.alarm
       
-      unless user.number.nil? 
+      unless user.number.empty? 
 
         client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
 
