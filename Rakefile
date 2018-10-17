@@ -80,16 +80,20 @@ task :make_alarmcall do
     puts " User alarm is #{user.alarm} "
   
     if Time.now > user.alarm
+      
+      unless user.number.nil? 
 
-      client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
+        client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
 
-      call = client.calls.create(
-          from: ENV["TWILIO_FROM"],
-          to: user.number,
-          url: "https://drive.google.com/file/d/1k9-l9gfbnGE-MjKY6qpA7eM_xnE69zFS/view?usp=sharing"
-          )
-      puts call.to
+        call = client.calls.create(
+            from: ENV["TWILIO_FROM"],
+            to: user.number,
+            url: "https://drive.google.com/file/d/1k9-l9gfbnGE-MjKY6qpA7eM_xnE69zFS/view?usp=sharing"
+            )
+        puts call.to
 
+      end 
+      
       user.alarm = user.alarm + 10.minutes
       user.save!
 
