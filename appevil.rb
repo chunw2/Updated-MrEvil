@@ -62,16 +62,17 @@ def determine_response body, sender
    media = giphy_for "hello"
  elsif body == "help" || body == "how"
    message = "To manage alarm settings,  simply type 'set alarm' or 'cancel alarm'. Interested in learning more about me? Type 'fact'."
-   
- # elsif body.include? "call"
-#
-#  client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
-#  call = client.calls.create(
-#      from: ENV["TWILIO_FROM"],
-#      to: ENV["MY_NUMBER"]
-#      url: "http://demo.twilio.com/docs/voice.xml"
-#      )
-#  puts call.to
+
+elsif body == "call"
+
+  client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
+
+  call = client.calls.create(
+      from: ENV["TWILIO_FROM"],
+      to: +13369349080,
+      url: "https://drive.google.com/file/d/1k9-l9gfbnGE-MjKY6qpA7eM_xnE69zFS/view?usp=sharing"
+   )
+  puts call.to
  
  elsif body.include? "fact"
    message = array_of_lines = IO.readlines("facts.txt").sample
