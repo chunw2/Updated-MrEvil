@@ -78,10 +78,11 @@ task :make_alarmcall do
     puts "Found User:"
   
     puts " User alarm is #{user.alarm} "
+    puts " User alarm is #{user.number} "
   
-    if Time.now > user.alarm
+    if Time.now > user.alarm 
       
-      unless user.number.empty? 
+      if not user.number.empty? 
 
         client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
 
